@@ -40,8 +40,8 @@ jobs:
       
     - name: Install dependencies
       run: |
-        pnpm install
-        cd apps/frontend && pnpm install
+        pnpm install --frozen-lockfile
+        cd apps/frontend && pnpm install --frozen-lockfile
         
     - name: Create environment file
       run: |
@@ -65,7 +65,12 @@ jobs:
     - name: Build frontend
       run: |
         cd apps/frontend
-        pnpm build
+        echo "Building frontend..."
+        pnpm run build
+        echo "Build completed, checking dist folder..."
+        ls -la dist/
+        echo "Checking images..."
+        ls -la dist/images/ | head -10
         
     - name: Setup Pages
       uses: actions/configure-pages@v4
