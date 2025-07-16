@@ -3,8 +3,6 @@ name: Deploy DilSeDaan to GitHub Pages
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -23,54 +21,43 @@ jobs:
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: latest
+        version: '8'
         
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+    - name: Install root dependencies
+      run: pnpm install --no-frozen-lockfile
         
-    - name: Setup pnpm cache
-      uses: actions/cache@v3
-      with:
-        path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
-      
-    - name: Install dependencies
+    - name: Install frontend dependencies
       run: |
-        pnpm install --frozen-lockfile
-        cd apps/frontend && pnpm install --frozen-lockfile
+        cd apps/frontend
+        pnpm install --no-frozen-lockfile
         
     - name: Create environment file
       run: |
         cd apps/frontend
-        cat > .env << 'EOF'
-        VITE_API_URL=https://api.dilsedaan.com/api
-        VITE_BACKEND_URL=https://api.dilsedaan.com
-        VITE_APP_NAME=DilSeDaan
-        VITE_APP_DESCRIPTION=India's Blockchain-Powered Charity Platform
-        VITE_WEB3_PROVIDER_URL=https://polygon-mainnet.infura.io/v3/demo
-        VITE_CONTRACT_ADDRESS=0x1234567890123456789012345678901234567890
-        VITE_CHAIN_ID=137
-        VITE_IPFS_GATEWAY_URL=https://ipfs.io/ipfs/
-        VITE_TWITTER_HANDLE=@DilSeDaan
-        VITE_FACEBOOK_PAGE=DilSeDaanIndia
-        VITE_ENABLE_BLOCKCHAIN=true
-        VITE_ENABLE_PUSH_NOTIFICATIONS=true
-        VITE_ENABLE_PWA=true
-        EOF
+        echo "VITE_API_URL=https://api.dilsedaan.com/api" > .env
+        echo "VITE_BACKEND_URL=https://api.dilsedaan.com" >> .env
+        echo "VITE_APP_NAME=DilSeDaan" >> .env
+        echo "VITE_APP_DESCRIPTION=India's Blockchain-Powered Charity Platform" >> .env
+        echo "VITE_WEB3_PROVIDER_URL=https://polygon-mainnet.infura.io/v3/demo" >> .env
+        echo "VITE_CONTRACT_ADDRESS=0x1234567890123456789012345678901234567890" >> .env
+        echo "VITE_CHAIN_ID=137" >> .env
+        echo "VITE_IPFS_GATEWAY_URL=https://ipfs.io/ipfs/" >> .env
+        echo "VITE_TWITTER_HANDLE=@DilSeDaan" >> .env
+        echo "VITE_FACEBOOK_PAGE=DilSeDaanIndia" >> .env
+        echo "VITE_ENABLE_BLOCKCHAIN=true" >> .env
+        echo "VITE_ENABLE_PUSH_NOTIFICATIONS=true" >> .env
+        echo "VITE_ENABLE_PWA=true" >> .env
         
     - name: Build frontend
       run: |
         cd apps/frontend
         echo "Building frontend..."
         pnpm run build
-        echo "Build completed, checking dist folder..."
+        echo "Build completed successfully!"
+        echo "Checking dist folder..."
         ls -la dist/
-        echo "Checking images..."
-        ls -la dist/images/ | head -10
+        echo "Checking images exist..."
+        ls -la dist/images/ | head -5
         
     - name: Setup Pages
       uses: actions/configure-pages@v4
