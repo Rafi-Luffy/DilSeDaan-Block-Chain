@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-07-07T18:42:58.833Z",
+  "network": "hardhat",
+  "contracts": {
+    "CharityDonationContract": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "MilestoneContract": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "AuditContract": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+  },
+  "testResults": {
+    "contractDeployment": "SUCCESS",
+    "creatorVerification": "SUCCESS",
+    "campaignCreation": "SUCCESS",
+    "donationSystem": "SUCCESS",
+    "milestoneSystem": "SUCCESS",
+    "eventSystem": "SUCCESS",
+    "dataAggregation": "SUCCESS"
+  },
+  "statistics": {
+    "totalDonations": "17.55",
+    "activeCampaigns": 1,
+    "donationEvents": 3
+  }
+}

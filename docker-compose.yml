@@ -1,0 +1,253 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    container_name: dilsedaan-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD:-admin123}
+      MONGO_INITDB_DATABASE: dilsedaan
+    volumes:
+      - mongodb_data:/data/db
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    ports:
+      - "27017:27017"
+    networks:
+      - dilsedaan-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: dilsedaan-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis123}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - dilsedaan-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      target: backend
+    container_name: dilsedaan-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DATABASE_URL: mongodb://admin:${MONGODB_ROOT_PASSWORD:-admin123}@mongodb:27017/dilsedaan?authSource=admin
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis123}@redis:6379
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      POLYGON_RPC_URL: ${POLYGON_RPC_URL}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+    volumes:
+      - backend_logs:/app/logs
+      - uploaded_files:/app/uploads
+    ports:
+      - "5000:5000"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - dilsedaan-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Web Server
+  frontend:
+    build:
+      context: .
+      target: frontend
+    container_name: dilsedaan-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    networks:
+      - dilsedaan-network
+    volumes:
+      - ./ssl:/etc/nginx/ssl:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Load Balancer (for multiple backend instances)
+  load-balancer:
+    image: nginx:alpine
+    container_name: dilsedaan-lb
+    restart: unless-stopped
+    volumes:
+      - ./nginx-lb.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    ports:
+      - "8080:80"
+      - "8443:443"
+    depends_on:
+      - backend
+    networks:
+      - dilsedaan-network
+    profiles:
+      - production
+
+  # MongoDB Admin Interface
+  mongo-express:
+    image: mongo-express:latest
+    container_name: dilsedaan-mongo-admin
+    restart: unless-stopped
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_ROOT_PASSWORD:-admin123}
+      ME_CONFIG_MONGODB_URL: mongodb://admin:${MONGODB_ROOT_PASSWORD:-admin123}@mongodb:27017/?authSource=admin
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD:-admin123}
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+    networks:
+      - dilsedaan-network
+    profiles:
+      - development
+
+  # Redis Admin Interface
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: dilsedaan-redis-admin
+    restart: unless-stopped
+    environment:
+      REDIS_HOSTS: local:redis:6379:0:${REDIS_PASSWORD:-redis123}
+      HTTP_USER: admin
+      HTTP_PASSWORD: ${REDIS_COMMANDER_PASSWORD:-admin123}
+    ports:
+      - "8082:8081"
+    depends_on:
+      - redis
+    networks:
+      - dilsedaan-network
+    profiles:
+      - development
+
+  # Monitoring with Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: dilsedaan-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - dilsedaan-network
+    profiles:
+      - monitoring
+
+  # Grafana Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: dilsedaan-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin123}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - dilsedaan-network
+    profiles:
+      - monitoring
+
+  # Log aggregation with ELK stack
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: dilsedaan-elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - dilsedaan-network
+    profiles:
+      - logging
+
+  # Backup Service
+  backup:
+    image: alpine:latest
+    container_name: dilsedaan-backup
+    restart: unless-stopped
+    volumes:
+      - ./scripts/backup-docker.sh:/backup.sh:ro
+      - backup_data:/backups
+      - mongodb_data:/data/mongodb:ro
+      - backend_logs:/data/logs:ro
+    command: crond -f
+    environment:
+      - BACKUP_SCHEDULE=0 2 * * *
+    depends_on:
+      - mongodb
+    networks:
+      - dilsedaan-network
+    profiles:
+      - production
+
+volumes:
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local
+  backend_logs:
+    driver: local
+  uploaded_files:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  backup_data:
+    driver: local
+
+networks:
+  dilsedaan-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

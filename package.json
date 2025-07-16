@@ -1,0 +1,76 @@
+{
+  "name": "dilsedaan",
+  "version": "1.0.0",
+  "description": "DilSeDaan - India's Blockchain-Powered Charity Platform",
+  "private": true,
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend"
+  ],
+  "scripts": {
+    "dev": "./start-dilsedaan.sh",
+    "start": "./start-dilsedaan.sh start",
+    "build": "./start-dilsedaan.sh build",
+    "install:all": "./start-dilsedaan.sh install",
+    "clean": "./start-dilsedaan.sh clean",
+    "seed": "./start-dilsedaan.sh seed",
+    "health": "./start-dilsedaan.sh health",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:mumbai": "hardhat run scripts/deploy-polygon.js --network mumbai",
+    "deploy:polygon": "hardhat run scripts/deploy-polygon.js --network polygon",
+    "verify:mumbai": "hardhat verify --network mumbai",
+    "verify:polygon": "hardhat verify --network polygon",
+    "node": "hardhat node",
+    "lint": "eslint apps/*/src --ext .ts,.tsx",
+    "type-check": "tsc --noEmit",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/DilSeDaan.git"
+  },
+  "keywords": [
+    "charity",
+    "blockchain",
+    "polygon",
+    "donations",
+    "india",
+    "transparency",
+    "social-impact",
+    "web3",
+    "react",
+    "nodejs"
+  ],
+  "author": "DilSeDaan Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-username/DilSeDaan/issues"
+  },
+  "homepage": "https://your-username.github.io/DilSeDaan",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@openzeppelin/contracts": "^5.3.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "hardhat": "^2.19.0",
+    "hardhat-gas-reporter": "^1.0.9",
+    "prettier": "^3.0.0",
+    "solidity-coverage": "^0.8.5",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@axe-core/cli": "^4.10.2",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.8.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}

@@ -1,0 +1,89 @@
+name: Deploy DilSeDaan to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+        
+    - name: Setup pnpm cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+      
+    - name: Install dependencies
+      run: |
+        pnpm install
+        cd apps/frontend && pnpm install
+        
+    - name: Create environment file
+      run: |
+        cd apps/frontend
+        cat > .env << 'EOF'
+        VITE_API_URL=https://api.dilsedaan.com/api
+        VITE_BACKEND_URL=https://api.dilsedaan.com
+        VITE_APP_NAME=DilSeDaan
+        VITE_APP_DESCRIPTION=India's Blockchain-Powered Charity Platform
+        VITE_WEB3_PROVIDER_URL=https://polygon-mainnet.infura.io/v3/demo
+        VITE_CONTRACT_ADDRESS=0x1234567890123456789012345678901234567890
+        VITE_CHAIN_ID=137
+        VITE_IPFS_GATEWAY_URL=https://ipfs.io/ipfs/
+        VITE_TWITTER_HANDLE=@DilSeDaan
+        VITE_FACEBOOK_PAGE=DilSeDaanIndia
+        VITE_ENABLE_BLOCKCHAIN=true
+        VITE_ENABLE_PUSH_NOTIFICATIONS=true
+        VITE_ENABLE_PWA=true
+        EOF
+        
+    - name: Build frontend
+      run: |
+        cd apps/frontend
+        pnpm build
+        
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+      
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./apps/frontend/dist
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
