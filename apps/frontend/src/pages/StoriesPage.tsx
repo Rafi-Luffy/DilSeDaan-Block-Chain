@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useCampaignStore, type Campaign } from '@/store/campaignStore'
 import { useAuthStore } from '@/store/authStore'
 import { getProgressPercentage } from '@/lib/utils'
+import { getImagePath } from '@/lib/images'
 import { PaymentModalReal } from '@/components/payment/PaymentModalReal'
 import { LoginModal } from '@/components/auth/LoginModal'
 
@@ -184,19 +185,19 @@ export function StoriesPage() {
                   <img
                     src={(() => {
                       const campaignImages: Record<string, string> = {
-                        'Padhega India, Tabhi Toh Badhega India!': '/images/image_1.png',
-                        'Ek Thali Khushiyon Ki': '/images/image_2.png',
-                        'Beti Padhao, Sapne Sajao': '/images/image_3.png',
-                        'Ek Chhat – Ek Jeevan': '/images/image_4.png',
-                        'Jeevan Bachao, Muskaan Lautaao': '/images/image_5.png',
-                        'Garmi ho ya Sardi, Madad ho har kism ki': '/images/image_6.png',
-                        'Gaon-Gaon Paani, Har Haath Swachhta': '/images/image_7.png',
-                        'Naye Hunar, Nayi Pehchaan': '/images/image_8.png',
-                        'Maa Yamuna Ko Saaf Bhi Rakhna Hai, Zinda Bhi': '/images/image_9.png',
-                        'Buzurgo Ka Haq – Apnapan aur Samman': '/images/image_10.png',
-                        'Khilti Muskaan, Acid ke Paar': '/images/image_11.png',
-                        'Mazdoor Desh Ka Mazboot Haath': '/images/image_12.png',
-                        'Man Ki Baat, Sunne Wale Hain Hum': '/images/image_13.png'
+                        'Padhega India, Tabhi Toh Badhega India!': getImagePath('images/image_1.png'),
+                        'Ek Thali Khushiyon Ki': getImagePath('images/image_2.png'),
+                        'Beti Padhao, Sapne Sajao': getImagePath('images/image_3.png'),
+                        'Ek Chhat – Ek Jeevan': getImagePath('images/image_4.png'),
+                        'Jeevan Bachao, Muskaan Lautaao': getImagePath('images/image_5.png'),
+                        'Garmi ho ya Sardi, Madad ho har kism ki': getImagePath('images/image_6.png'),
+                        'Gaon-Gaon Paani, Har Haath Swachhta': getImagePath('images/image_7.png'),
+                        'Naye Hunar, Nayi Pehchaan': getImagePath('images/image_8.png'),
+                        'Maa Yamuna Ko Saaf Bhi Rakhna Hai, Zinda Bhi': getImagePath('images/image_9.png'),
+                        'Buzurgo Ka Haq – Apnapan aur Samman': getImagePath('images/image_10.png'),
+                        'Khilti Muskaan, Acid ke Paar': getImagePath('images/image_11.png'),
+                        'Mazdoor Desh Ka Mazboot Haath': getImagePath('images/image_12.png'),
+                        'Man Ki Baat, Sunne Wale Hain Hum': getImagePath('images/image_13.png')
                       };
                       return campaignImages[campaign.title] || `/images/image_${(index % 13) + 1}.png`;
                     })()}
