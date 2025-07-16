@@ -32,7 +32,6 @@ export default defineConfig({
       }
     }
   },
-  base: process.env.NODE_ENV === 'production' ? '/DilSeDaan/' : '/',
   define: {
     global: 'globalThis',
   }
