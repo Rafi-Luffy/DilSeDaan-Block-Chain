@@ -23,11 +23,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
+          vendor: ['react', 'react-dom', 'react-router-dom'],
           blockchain: ['web3', 'ethers'],
+          ui: ['lucide-react', 'framer-motion'],
+          charts: ['recharts'],
+          utils: ['lodash', 'date-fns', 'clsx', 'tailwind-merge']
         }
       }
     }
