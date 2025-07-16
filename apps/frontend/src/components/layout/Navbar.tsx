@@ -23,7 +23,6 @@ export function Navbar() {
     const baseItems = [
       { href: '/', label: t('navigation.home') },
       { href: '/stories', label: t('navigation.stories') },
-      { href: '/campaigns', label: t('navigation.campaigns') },
       { href: '/impact', label: t('navigation.impact') },
       { href: '/transparency', label: t('navigation.transparency') },
       { href: '/contact', label: t('navigation.contact') },
@@ -156,15 +155,6 @@ export function Navbar() {
                         >
                           <Shield className="inline h-4 w-4 mr-2" />
                           {t('navigation.adminPanel')}
-                        </Link>
-                    )}
-                    {user?.role !== 'admin' && (                        <Link
-                          to="/create-campaign"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                          onClick={() => setShowUserMenu(false)}
-                        >
-                          <Heart className="inline h-4 w-4 mr-2" />
-                          {t('navigation.startCampaign')}
                         </Link>
                     )}
                     <div className="border-t border-gray-100 mt-1"></div>
@@ -312,18 +302,6 @@ export function Navbar() {
                         <Link to="/admin" onClick={() => setIsOpen(false)}>
                           <Shield className="h-4 w-4 mr-2" />
                           {t('navigation.adminPanel')}
-                        </Link>
-                      </Button>
-                    )}
-                    {user?.role !== 'admin' && (
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="w-full"
-                      >
-                        <Link to="/create-campaign" onClick={() => setIsOpen(false)}>
-                          <Heart className="h-4 w-4 mr-2" />
-                          {t('navigation.startCampaign')}
                         </Link>
                       </Button>
                     )}

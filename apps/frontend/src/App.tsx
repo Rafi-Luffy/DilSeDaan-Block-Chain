@@ -5,7 +5,6 @@ import '@/i18n'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { HomePage } from '@/pages/HomePage'
-import { CampaignsPage } from '@/pages/CampaignsPage'
 import { StoriesPage } from '@/pages/StoriesPage'
 import DonatePage from '@/pages/DonatePage'
 import { DashboardPage } from '@/pages/DashboardPage'
@@ -55,7 +54,6 @@ function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/campaigns" element={<CampaignsPage />} />
           <Route path="/create-campaign" element={
             <ProtectedRoute>
               <CreateCampaignPageNew />

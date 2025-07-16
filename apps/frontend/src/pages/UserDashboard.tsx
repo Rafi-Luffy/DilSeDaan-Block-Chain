@@ -860,7 +860,7 @@ const UserDashboard: React.FC = () => {
                 <CardContent className="space-y-3">
                   <Button 
                     className="w-full bg-warm-orange hover:bg-warm-orange/90"
-                    onClick={() => window.location.href = '/campaigns'}
+                    onClick={() => window.location.href = '/stories'}
                   >
                     <Heart className="h-4 w-4 mr-2" />
                     Make a Donation

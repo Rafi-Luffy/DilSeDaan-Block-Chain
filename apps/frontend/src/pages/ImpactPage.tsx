@@ -8,6 +8,7 @@ import { Link, useSearchParams, useLocation } from 'react-router-dom'
 import { formatCurrency, getProgressPercentage } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 import { ImpactGallery } from '@/components/impact/ImpactGallery'
+import { getImagePath } from '@/lib/images'
 
 type ImpactStatus = {
   name: string
@@ -61,7 +62,7 @@ const helpedPeople = [
     id: 1,
     name: "Priya Sharma",
     age: 8,
-    image: "/images/image_4.png",
+    image: getImagePath("images/image_4.png"),
     category: "Education",
     story: "Priya received school supplies and uniform through our education program. She's now excelling in her studies and dreams of becoming a teacher.",
     location: "Mumbai, Maharashtra"
@@ -70,7 +71,7 @@ const helpedPeople = [
     id: 2,
     name: "Rajesh Kumar",
     age: 45,
-    image: "/images/image_5.png",
+    image: getImagePath("images/image_5.png"),
     category: "Clean Water",
     story: "Thanks to our clean water initiative, Rajesh's village now has access to safe drinking water for 500 families.",
     location: "Rajasthan"
@@ -79,7 +80,7 @@ const helpedPeople = [
     id: 3,
     name: "Kamala Devi",
     age: 68,
-    image: "/images/image_6.png",
+    image: getImagePath("images/image_6.png"),
     category: "Healthcare",
     story: "Kamala received essential diabetes medication and regular health checkups through our healthcare program.",
     location: "Kerala"
@@ -88,7 +89,7 @@ const helpedPeople = [
     id: 4,
     name: "Arjun Singh",
     age: 12,
-    image: "/images/image_7.png",
+    image: getImagePath("images/image_7.png"),
     category: "Child Welfare",
     story: "Arjun was provided with nutritious meals and educational support. He's now healthy and attending school regularly.",
     location: "Bihar"
@@ -97,7 +98,7 @@ const helpedPeople = [
     id: 5,
     name: "Meera Patel",
     age: 28,
-    image: "/images/image_8.png",
+    image: getImagePath("images/image_8.png"),
     category: "Women Empowerment",
     story: "Meera learned new skills through our vocational training program and now runs her own small business.",
     location: "Gujarat"
@@ -106,7 +107,7 @@ const helpedPeople = [
     id: 6,
     name: "Ravi Krishnan",
     age: 52,
-    image: "/images/image_9.png",
+    image: getImagePath("images/image_9.png"),
     category: "Disaster Relief",
     story: "After the floods, Ravi's family received emergency supplies and temporary shelter. They're now rebuilding their lives.",
     location: "Tamil Nadu"

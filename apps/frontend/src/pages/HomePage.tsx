@@ -8,6 +8,7 @@ import { formatCurrency, formatNumber, getProgressPercentage } from '@/lib/utils
 import { useToast } from '@/hooks/use-toast'
 import { useTranslation } from 'react-i18next'
 import { PaymentModalReal } from '@/components/payment/PaymentModalReal'
+import { getImagePath } from '@/lib/images'
 import { useState, useEffect } from 'react'
 
 import type { Campaign } from '@/store/campaignStore'
@@ -121,21 +122,21 @@ export function HomePage() {
     {
       title: "Ravi's Educational Journey",
       description: "Young Ravi from a remote village in Bihar dreamed of becoming an engineer. Through our education support program, he received books, uniforms, and digital learning tools. Today, he's pursuing his engineering degree and inspiring other children in his village.",
-      image: "/images/home_image_1.png",
+      image: getImagePath("images/home_image_1.png"),
       impact: "Education Success",
       hearts: 456
     },
     {
       title: "Priya's Nutrition Recovery",
       description: "8-year-old Priya was severely malnourished when we found her. Through our nutrition program, she received healthy meals and medical care. Now she's a bright, healthy student who never misses school and helps other children learn about nutrition.",
-      image: "/images/home_image_2.png", 
+      image: getImagePath("images/home_image_2.png"), 
       impact: "Health Transformation",
       hearts: 623
     },
     {
       title: "Meera's Empowerment Story",
       description: "Meera was denied education because she was a girl. Our scholarship program changed her life - she completed her studies, became a teacher, and now runs a school for underprivileged girls in her community, breaking the cycle of inequality.",
-      image: "/images/home_image_3.png",
+      image: getImagePath("images/home_image_3.png"),
       impact: "Breaking Barriers", 
       hearts: 789
     }
@@ -371,7 +372,7 @@ export function HomePage() {
               >
                 <div className="relative overflow-hidden rounded-2xl mb-6">
                   <img
-                    src={campaign.images?.[0]?.url || `/images/image_${(index % 3) + 1}.png`}
+                    src={campaign.images?.[0]?.url || getImagePath(`images/image_${(index % 3) + 1}.png`)}
                     alt={campaign.title}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                   />
