@@ -286,22 +286,27 @@ PRIVATE_KEY=your_private_key
 
 ---
 
-## 📋 **Roadmap 2024-2025**
+## 📋 **Roadmap 2025-2026**
 
-### **Q4 2024**
-- [ ] **Mobile App Launch** (iOS & Android)
-- [ ] **Voice Commands** (Hindi & English)
-- [ ] **AI-Powered Recommendations**
+### **Q1 MVP Development & Core Launch**
+- [ ] **Core Platform Development (Execute the build of the frontend and backend)** 
+- [ ] **Blockchain Integration (Deploy and integrate the primary smart contract on Polygon)** (Hindi & English)
+- [ ] **Launch MVP (Deploy the live website with user authentication and core donation functionality)**
 
-### **Q1 2025**
-- [ ] **Corporate CSR Portal**
-- [ ] **Volunteer Matching System**
-- [ ] **Impact Measurement Dashboard**
+### **Q2 Enhancing Trust & User Engagement**
+- [ ] **Public Verification Link (Provide donors with a permanent link to their on-chain transaction)**
+- [ ] **Advanced User Dashboards (Develop panels for donors and organizations to track activity)**
+- [ ] **Automated 80G Receipts (Launch the system for sending tax-compliant receipts via email)**
 
-### **Q2 2025**
-- [ ] **International Expansion**
-- [ ] **Cryptocurrency Donations**
-- [ ] **NFT Certificates for Donors**
+### **Q3 Mobile & Ecosystem Expansion**
+- [ ] **Native Mobile App - Phase 1 (Launch for iOS & Android with core features)**
+- [ ] **Recurring Donation Subscriptions (Allow users to set up monthly or yearly donations)**
+- [ ] **AI-Powered Recommendations (Beta) (Begin development of a personalization engine)**
+
+### **Q4 Mobile & Ecosystem Expansion**
+- [ ] **Corporate & CSR Partnership Portal** (Develop a dedicated portal for company giving programs)
+- [ ] **Volunteer Matching Platform (Pilot)** (Launch a pilot program to connect skilled volunteers with NGOs)
+- [ ] **On-Chain Milestone Tracking** (Implement smart contracts for automated, milestone-based fund release)
 
 ---
 
@@ -324,8 +329,8 @@ PRIVATE_KEY=your_private_key
 
 ### **Get in Touch**
 
-📧 **Email**: [support@dilsedaan.org](mailto:support@dilsedaan.org)  
-📱 **WhatsApp**: [+91-XXXXX-XXXXX](https://wa.me/91xxxxxxxxxx)  
+📧 **Email**: [dilsedaan.chairty@gmail.com](mailto:support@dilsedaan.org)  
+📱 **WhatsApp**: [+91-7671966605](https://wa.me/91xxxxxxxxxx)  
 💬 **Telegram**: [@DilSeDaanSupport](https://t.me/DilSeDaanSupport)  
 
 ### **Follow Us**
